@@ -1,4 +1,6 @@
 # Write your code below game_hash
+require "pry"
+
 def game_hash
   {
     home: {
@@ -127,3 +129,76 @@ def game_hash
 end
 
 # Write code here
+
+
+def all_players
+  game_hash[:home][:players] + game_hash[:away][:players]
+end
+
+
+def num_points_scored name
+    player_found = nil
+    all_players.each do |player|
+      if player[:player_name] == name
+       return player[:points]
+   end
+  end
+  return "Player not found"
+end
+
+
+def shoe_size(name)
+  player_found = all_players.find {|player| player[:player_name] == name}
+  player_found ? player_found[:shoe] : "Player not found"
+end
+
+
+def team_colors(team_name)
+  if game_hash[:home][:team_name] == team_name
+    game_hash[:home][:colors]
+  elsif game_hash[:away][:team_name] == team_name
+    game_hash[:away][:colors]
+  else
+    return "We do not have that team!"
+  end
+end
+
+
+def team_names
+  return [game_hash[:home][:team_name], game_hash[:away][:team_name]]
+end
+
+
+def player_numbers(team_name)
+  if game_hash[:home][:team_name] == team_name
+    game_hash[:home][:players].map {|player| player[:number]}
+  elsif game_hash[:away][:team_name] == team_name
+    game_hash[:away][:players].map {|player| player[:number]}
+  else
+    return "We do not have that team!"
+  end
+end
+
+
+def player_stats(name)
+  all_players.find{|player| player[:player_name] == name}
+end
+
+def biggest_shoe
+  all_players.max_by {|player| player[:shoe]}
+end
+
+# binding.pry
+def big_shoe_rebounds
+  biggest_shoe[:rebounds]
+end
+
+
+def winning_team
+  home_score = game_hash[:home][:players].sum {|player| player[:points]}
+  away_score = game_hash[:away][:players].sum {|player| player[:points]}
+  home_score > away_score ? game_hash[:home][:team_name] : game_hash[:away][:team_name]
+end
+
+
+puts(winning_team)
